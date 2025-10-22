@@ -4,6 +4,9 @@ describe "Nave de carga" {
 
 	const naveVacia = new NaveDeCarga()
 	const naveLlena = new NaveDeCarga(carga = 500000, velocidad = 290000)
+	const naveQuieta = new NaveDeCarga(velocidad = 0)
+	const naveRadiactiva = new NaveDeCargaRadiactiva(carga = 5000, velocidad = 10000)
+	const naveQueViaja = new NaveDeCargaRadiactiva()
 
 	test "sobrecargada" {
 		assert.that(naveLlena.sobrecargada())
@@ -26,12 +29,32 @@ describe "Nave de carga" {
 		assert.equals(0, naveVacia.carga())
 	}
 
+	test "propulsar"{
+		assert.equals(0, naveQuieta.velocidad())
+		naveQuieta.propulsar()
+		assert.equals(20000, naveQuieta.velocidad())
+	}
+
+	test "carga radiactiva"{
+		naveRadiactiva.recibirAmenaza()
+		assert.equals(5000, naveRadiactiva.carga())
+		assert.equals(0, naveRadiactiva.velocidad())
+	}
+
+	test "radiactiva puede prepararse para viajar"{
+		naveQueViaja.prepararseParaViajar()
+		assert.equals(15000, naveQueViaja.velocidad())
+		assert.that(naveQueViaja.estaSellada())
+	}
 }
 
 describe "Nave de pasajeros" {
 
 	const naveSinPasajeros = new NaveDePasajeros()
 	const naveConPasajeros = new NaveDePasajeros(cantidadDePasajeros = 296, velocidad = 290000)
+	const naveParaPropulsar = new NaveDePasajeros(velocidad = 290000)
+	const naveQueViaja = new NaveDePasajeros(velocidad = 290000)
+
 
 	test "velocidad maxima sin pasajeros" {
 		assert.equals(75000, naveSinPasajeros.velocidadMaximaLegal())
@@ -54,6 +77,21 @@ describe "Nave de pasajeros" {
 		assert.that(naveSinPasajeros.alarma())
 	}
 
+	test "propulsar"{
+		naveParaPropulsar.propulsar()
+		assert.equals(300000, naveParaPropulsar.velocidad())
+	}
+
+	test "prepararse para viajar"{
+		naveQueViaja.prepararseParaViajar()
+		assert.equals(300000, naveQueViaja.velocidad())
+	}
+
+	test "recibir una amenaza"{
+		naveSinPasajeros.encontrarseConEnemigo()
+		assert.equals(20000, naveSinPasajeros.velocidad())
+		assert.that(naveSinPasajeros.alarma())
+	}
 }
 
 describe "Nave de combate" {
@@ -82,5 +120,18 @@ describe "Nave de combate" {
 	test "recibir amenaza en ataque" {
 		naveEnAtaque.recibirAmenaza()
 		assert.equals("Enemigo encontrado", naveEnAtaque.ultimoMensaje())
+	}
+
+	test "modo ataque se prepara para viajar"{
+		naveEnAtaque.prepararseParaViajar()
+		assert.equals("Volviendo a la base", naveEnAtaque.ultimoMensaje())
+		assert.equals(15000, naveEnAtaque.velocidad())
+	}
+
+	test "modo reposo se prepara para viajar"{
+		naveEnReposo.prepararseParaViajar()
+		assert.equals("Saliendo en misión", naveEnReposo.ultimoMensaje())
+		assert.equals(15000, naveEnReposo.velocidad())
+		assert.equals(ataque, naveEnReposo.modo())
 	}
 }
