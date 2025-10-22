@@ -4,6 +4,8 @@ describe "Nave de carga" {
 
 	const naveVacia = new NaveDeCarga()
 	const naveLlena = new NaveDeCarga(carga = 500000, velocidad = 290000)
+	const naveQuieta = new NaveDeCarga(velocidad = 0)
+	const naveRadiactiva = new NaveDeCargaRadiactiva(carga = 5000, velocidad = 10000)
 
 	test "sobrecargada" {
 		assert.that(naveLlena.sobrecargada())
@@ -26,12 +28,25 @@ describe "Nave de carga" {
 		assert.equals(0, naveVacia.carga())
 	}
 
+	test "propulsar"{
+		assert.equals(0, naveQuieta.velocidad())
+		naveQuieta.propulsar()
+		assert.equals(20000, naveQuieta.velocidad())
+	}
+
+	test "carga radiactiva"{
+		naveRadiactiva.recibirAmenaza()
+		assert.equals(5000, naveRadiactiva.carga())
+		assert.equals(0, naveRadiactiva.velocidad())
+	}
 }
 
 describe "Nave de pasajeros" {
 
 	const naveSinPasajeros = new NaveDePasajeros()
 	const naveConPasajeros = new NaveDePasajeros(cantidadDePasajeros = 296, velocidad = 290000)
+	const naveParaPropulsar = new NaveDePasajeros(velocidad = 290000)
+
 
 	test "velocidad maxima sin pasajeros" {
 		assert.equals(75000, naveSinPasajeros.velocidadMaximaLegal())
@@ -52,6 +67,11 @@ describe "Nave de pasajeros" {
 	test "recibir amenaza" {
 		naveSinPasajeros.recibirAmenaza()
 		assert.that(naveSinPasajeros.alarma())
+	}
+
+	test "propulsar"{
+		naveParaPropulsar.propulsar()
+		assert.equals(300000, naveParaPropulsar.velocidad())
 	}
 
 }
