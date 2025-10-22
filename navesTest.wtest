@@ -86,6 +86,12 @@ describe "Nave de pasajeros" {
 		naveQueViaja.prepararseParaViajar()
 		assert.equals(300000, naveQueViaja.velocidad())
 	}
+
+	test "recibir una amenaza"{
+		naveSinPasajeros.encontrarseConEnemigo()
+		assert.equals(20000, naveSinPasajeros.velocidad())
+		assert.that(naveSinPasajeros.alarma())
+	}
 }
 
 describe "Nave de combate" {

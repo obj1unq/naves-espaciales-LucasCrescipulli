@@ -23,6 +23,11 @@ class Nave{
 			velocidad += 15000
 		}
 	}
+
+	method encontrarseConEnemigo(){
+		self.recibirAmenaza()
+		self.propulsar()
+	}
 }
 
 class NaveDeCarga inherits Nave {
